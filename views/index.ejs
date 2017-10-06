@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Message Board</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        #errors{
+            color: red;
+            padding: 70px;
+            text-align: center;
+        }
+        #post{
+            /* border: 1px solid #999; */
+            padding: 5px 10px 5px 10px;
+            border-radius: 10px;
+            color: white;
+            background-color: #02c19f;
+            width: 500px;
+        }
+        #comment{
+            /* border: 1px solid #999; */
+            padding: 5px 10px 5px 10px;
+            border-radius: 10px;
+            color: white;
+            background-color: #C5990A;
+            width: 400px;
+            margin-top: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Dojo Message Board</h1>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <form action="/posts" method="post">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" id="name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea class="form-control" rows="5" id="message" name="message"></textarea>
+                    </div>
+                    <input type="submit" value="Post" class="btn btn-primary">
+                </form>
+            </div>
+            <div class="col-md-4" id="errors">
+                    <% if(typeof(errors) != 'undefined' ) { %>
+                        <% for (let x in errors) { %>
+                        <p><%= errors[x].message %></p>
+                        <% } %>
+                    <% } %>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-8">
+                <% for (var post of posts) { %>
+                    <div id="post">
+                        <h5>Name: <%= post.name %></h5>
+                        <h4>Message: <%= post.text %></h4>
+                    </div>
+                    <br>
+                        <% for (var comment of post.comments) { %>
+                            <div id="comment" class="pull-right">
+                                <h5>Name: <%= comment.name %></h5>
+                                <h4>Message: <%= comment.text %></h4>
+                            </div>  
+                        <% } %>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <br>
+                            <form action="/posts/<%= post._id %>" method="post">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" id="name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Comment:</label>
+                                    <textarea class="form-control" rows="2" id="message" name="message"></textarea>
+                                </div>
+                                <input type="submit" value="Post" class="btn btn-primary">
+                            </form>
+                        </div>
+                        <div class="col-md-6" id="errors">
+                                <% if(typeof(c_errors) != 'undefined' ) { %>
+                                    <% for (let x in c_errors) { %>
+                                    <p><%= c_errors[x].message %></p>
+                                    <% } %>
+                                <% } %>
+                        </div>
+                    </div>
+                    <hr>
+                <% } %>
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+    </div>
+</body>
+</html>
